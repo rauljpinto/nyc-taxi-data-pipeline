@@ -1,0 +1,79 @@
+{
+  "name": "nyc_taxi_data_analysis",
+  "email_notifications": {
+    "on_start": [
+      "engineer@company.com"
+    ],
+    "on_success": [
+      "engineer@company.com"
+    ],
+    "on_failure": [
+      "engineer@company.com"
+    ],
+    "no_alert_for_skipped_runs": true
+  },
+  "webhook_notifications": {},
+  "notification_settings": {
+    "no_alert_for_skipped_runs": true,
+    "no_alert_for_canceled_runs": true
+  },
+  "timeout_seconds": 0,
+  "schedule": {
+    "quartz_cron_expression": "58 0 6 ? * Fri",
+    "timezone_id": "America/Sao_Paulo",
+    "pause_status": "UNPAUSED"
+  },
+  "max_concurrent_runs": 1,
+  "tasks": [
+    {
+      "task_key": "bronze_layer_task",
+      "run_if": "ALL_SUCCESS",
+      "notebook_task": {
+        "notebook_path": "/Workspace/Projects/NYC Taxi Data Analysis/1_bronze/bronze_taxi_data_ingestion",
+        "source": "WORKSPACE"
+      },
+      "timeout_seconds": 0,
+      "email_notifications": {},
+      "webhook_notifications": {}
+    },
+    {
+      "task_key": "silver_layer_task",
+      "depends_on": [
+        {
+          "task_key": "bronze_layer_task"
+        }
+      ],
+      "run_if": "ALL_SUCCESS",
+      "notebook_task": {
+        "notebook_path": "/Workspace/Projects/NYC Taxi Data Analysis/2_silver/silver_taxi_data_transforming",
+        "source": "WORKSPACE"
+      },
+      "timeout_seconds": 0,
+      "email_notifications": {},
+      "webhook_notifications": {}
+    },
+    {
+      "task_key": "gold_layer_task",
+      "depends_on": [
+        {
+          "task_key": "silver_layer_task"
+        }
+      ],
+      "run_if": "ALL_SUCCESS",
+      "notebook_task": {
+        "notebook_path": "/Workspace/Projects/NYC Taxi Data Analysis/3_gold/gold_taxi_data_load",
+        "source": "WORKSPACE"
+      },
+      "timeout_seconds": 0,
+      "email_notifications": {},
+      "webhook_notifications": {}
+    }
+  ],
+  "queue": {
+    "enabled": true
+  },
+  "performance_target": "STANDARD",
+  "run_as": {
+    "user_name": "engineer@company.com"
+  }
+}
