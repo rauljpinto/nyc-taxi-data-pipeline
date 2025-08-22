@@ -54,7 +54,7 @@ Foi implementado um star schema para melhor distribuição e visualização dos 
 - Tabela Fato (f_trips)
 ```bash
 schema = {
-    "trip_id": "long",                # Chave primária
+    "trip_id": "long",            # Chave primária
     "time_id": "long",            # FK para d_time
     "vendor_id": "int",           # FK para d_vendor  
     "payment_type_id": "int",     # FK para d_payment_type
