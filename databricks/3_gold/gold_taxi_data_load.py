@@ -94,6 +94,7 @@ df_fact = df_silver \
         col("dropoff_latitude"), 
         col("dropoff_longitude")
     )
+df_fact = df_fact.withColumn("trip_id", monotonically_increasing_id())
 df_fact.write \
     .format("delta") \
     .mode("overwrite") \
